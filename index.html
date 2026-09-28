@@ -1342,19 +1342,36 @@
         successLink.href = botUrl;
       }
 
+      // Send alert directly to Admin via @GPTifyUzAdminbot
+      const botToken = '8652296582:AAGr4AShAy8dHKBil5pM3R07t4m8upOjNhM';
+      const adminChatIds = ['5077641672', '327216340'];
+      const now = new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' });
+
+      const tgMessage = 
+        `⚡ <b>Yangi ILDAM B2B CRM Ariza (ildam.gptify.uz)</b>\n\n` +
+        `🏢 <b>Kompaniya / YaTT:</b> ${company}\n` +
+        `👤 <b>Mas'ul shaxs:</b> ${contact}\n` +
+        `📞 <b>Telefon:</b> <a href="tel:${phone}">${phone}</a>\n` +
+        `⭐ <b>Tanlangan paket:</b> ${pkg}\n` +
+        `⏰ <b>Vaqt:</b> ${now}\n\n` +
+        `<i>💡 Yangi B2B CRM arizasi ILDAM landing sahifasidan yuborildi.</i>`;
+
       try {
-        fetch('/api/inbound/google-sheets', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            first_name: contact,
-            last_name: `(${company})`,
-            phone: phone,
-            industry: 'B2B Client',
-            notes: `Tanlangan paket: ${pkg} | Manba: ILDAM Landing Page`
+        await Promise.allSettled(adminChatIds.map(chatId =>
+          fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: tgMessage,
+              parse_mode: 'HTML',
+              disable_web_page_preview: false
+            })
           })
-        }).catch(() => {});
-      } catch (err) {}
+        ));
+      } catch (err) {
+        console.error('Telegram lead notification error:', err);
+      }
 
       // Show success screen and open Telegram bot
       document.getElementById('auditForm').classList.add('hidden');

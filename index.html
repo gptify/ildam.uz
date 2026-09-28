@@ -1334,8 +1334,8 @@
       btn.disabled = true;
       btn.innerText = "Yuborilmoqda...";
 
-      const cleanTag = (company + '_' + contact).replace(/[^a-zA-Z0-9_]/g, '_').substring(0, 50);
-      const botUrl = `https://t.me/GPTifyUzAdminbot?start=${encodeURIComponent(cleanTag || 'ildam_lead')}`;
+      const cleanTag = (company + '_' + contact).replace(/[^a-zA-Z0-9_]/g, '_').substring(0, 45);
+      const botUrl = `https://t.me/GPTifyUzAdminbot?start=ildam_${encodeURIComponent(cleanTag || 'lead')}`;
       
       const successLink = document.getElementById('tgSuccessBtn');
       if (successLink) {
